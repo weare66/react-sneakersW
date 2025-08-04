@@ -1,17 +1,25 @@
-function Card() {
+
+import styleCard from './Card.module.scss';
+
+
+
+
+function Card(props) {
+   
+    
     return (
-    <div className="card">
-        <div className="favorite">
+    <div className={styleCard.card}>
+        <div className={styleCard.favorite}>
           <img src="/img/heart-unliked.svg" alt="unliked" />
         </div>  
-        <img height={112} width={133} src="/img/sneakers/sn1.jpg" alt="" />
-        <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
+        <img height={112} width={133} src={props.imageUrl} alt="" />
+        <h5>{props.title}</h5>
         <div className="d-flex justify-between align-center">
             <div className="d-flex flex-column">
               <span>Цена:</span>
-              <b>12 999 руб.</b>
+              <b>{props.price} руб.</b>
             </div>
-            <button className="button">
+            <button className="button" onClick={props.onClick}>
               <img width={32} height={32} src="/img/buttonPlus.svg" alt="plus" />
             </button>
         </div>
