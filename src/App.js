@@ -1,21 +1,51 @@
-
+import React, { useState } from 'react';
 import Card from './componets/Card';
 import Header from './componets/Header';
 import Drawer from './componets/Drawer';
+import { render } from '@testing-library/react';
 
 
-const arr = [
-  {name: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 12999, imageUrl: '/img/sneakers/sn1.jpg'},
-  {name: 'Мужские Кроссовки Nike Air Max 270', price: 12999, imageUrl: '/img/sneakers/sn2.jpg'},
-  {name: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 8499, imageUrl: '/img/sneakers/sn3.jpg'},
-  {name: 'Кроссовки Puma X Aka Boku Future Rider', price: 8999, imageUrl: '/img/sneakers/sn4.jpg'},
-];
 
 function App() {
+
+  //массив для хранения карточек на главной
+  const [items, setItems] = React.useState([]); 
+
+
+  //массив для хранения товаров
+  const [cartItems, setCartItems] = React.useState([]); 
+
+
+  const [isOpenCart, setIsOpenCard] = React.useState((false));
+
+  React.useEffect(() => {
+    fetch('https://68931363c49d24bce8695195.mockapi.io/items')
+    .then((obj) => {
+      return obj.json();
+    })
+    .then((json) => {
+      setItems(json);
+    })
+  }, []);
+
+
+  const onAddToCart = (obj) => {
+    setCartItems((perv) => [...perv, obj]);
+  };
+  
+  
+  
+
+  
+  
   return (
     <div className ="wrapper clear"> 
-    <Drawer/>
-    <Header />
+      
+      {isOpenCart ? <Drawer items={cartItems} onClose = {() => setIsOpenCard(false)}/> : false}
+      
+
+       
+      <Header onOpenCart = {() => setIsOpenCard(true)}/>
 
       
 
@@ -29,16 +59,21 @@ function App() {
         </div>
        
         
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
 
-          {arr.map(obj => (
+          
+            {items.map((item) => (
             <Card
-            title = {obj.name}
-            price = {obj.price}
-            imageUrl = {obj.imageUrl}
-            onClick = {() => console.log(obj)}
+            title = {item.name}
+            price = {item.price}
+            imageUrl = {item.imageUrl}
+            onClickPluse = {(obj) => onAddToCart(obj)}
+            onClickFavorite = {() => console.log('В избранное')}
             />
           ))}
+          
+
+          
           
           
           
@@ -60,3 +95,10 @@ function App() {
 }
 
 export default App;
+
+
+
+ {/** { isOpenCard ? <Drawer onClose = {() => {setisOpenCard(false)}}/> : null}
+    
+    <Header onClicCart = {() => {setisOpenCard(true)}} />*/}
+    
