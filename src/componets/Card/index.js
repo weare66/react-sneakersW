@@ -1,22 +1,31 @@
 
 import styleCard from './Card.module.scss';
-import React from 'react';
+import React, { useState } from 'react';
 
 
 
-function Card({title, price, imageUrl, onClickFavorite, onClickPluse}) {
+function Card({id, title, price, imageUrl, onClickFavorite, onClickPluse, favorited = false}) {
   
   const [isAdded, setIsAdded] = React.useState(false);
+
+  const [isFavorite, setIsFavorite] = React.useState(favorited);
+
+
 
   const hendlerClick = () => {
     onClickPluse({title, price, imageUrl});
     setIsAdded(!isAdded);
   };
 
+  const hendelFavorite = () => {
+    onClickFavorite({id, title, price, imageUrl});
+    setIsFavorite(!isFavorite)
+  };  
+
     return (
     <div className={styleCard.card}>
         <div className={styleCard.favorite} onClick={onClickFavorite}>
-          <img src="/img/heart-unliked.svg" alt="unliked" />
+          <img onClick={hendelFavorite} src={isFavorite ? "/img/liked.svg" : "/img/unliked.svg"} alt="unliked" />
         </div>  
         <img height={112} width={133} src={imageUrl} alt="" />
         <h5>{title}</h5>
@@ -34,5 +43,3 @@ function Card({title, price, imageUrl, onClickFavorite, onClickPluse}) {
 }
 
 export default Card;
-
-
