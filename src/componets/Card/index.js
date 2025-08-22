@@ -24,15 +24,15 @@ function Card({
 
   const [isFavorite, setIsFavorite] = React.useState(favorited);
 
- 
+ const itemObj = {id, parentId: id, title, price, imageUrl};
 
   const hendlerClick = () => {
-    onClickPluse({id, title, price, imageUrl});
+    onClickPluse(itemObj);
     //setIsAdded(!isAdded);
   };
 
   const hendelFavorite = () => {
-    onClickFavorite({id, title, price, imageUrl});
+    onClickFavorite(itemObj);
     setIsFavorite(!isFavorite)
   };  
 
@@ -56,9 +56,12 @@ function Card({
   </ContentLoader>
   :
   <>
-      <div className={styleCard.favorite} onClick={onClickFavorite}>
+    {onClickFavorite &&
+    <div className={styleCard.favorite} onClick={onClickFavorite}>
           <img onClick={hendelFavorite} src={isFavorite ? "/img/liked.svg" : "/img/unliked.svg"} alt="unliked" />
-      </div>  
+      </div>
+    }
+        
         <img height={135} width='100%' src={imageUrl} alt="" />
         <h5>{title}</h5>
         <div className="d-flex justify-between align-center">
@@ -67,7 +70,11 @@ function Card({
               <b>{price} руб.</b>
             </div>
             
-              <img className={styleCard.plus} onClick={hendlerClick}   src={isAddedItems(id) ? '/img/button-check.svg' : '/img/buttonPlus.svg'} alt="plus" />
+              {onClickPluse && <img 
+              className={styleCard.plus} 
+              onClick={hendlerClick}   
+              src={isAddedItems(id) ? '/img/button-check.svg' : '/img/buttonPlus.svg'} 
+              alt="plus" />}
             
         </div>
   </>

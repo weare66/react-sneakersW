@@ -1,17 +1,26 @@
-import Info from "./Info";
-import React from 'react'
-import AppContext from "../context";
+
+import React from 'react';
 import axios from "axios";
+
+import Info from "../Info";
+import { useCart } from "../../hooks/useCart";
+
+import styles from './Drawer.module.scss' 
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function Drawer({onClose, items = [], onRemove} ) {
+function Drawer({onClose, items = [], onRemove, opened} ) {
+  
+  const { cartItems, setCartItems, sumPrice} = useCart();
   const [isOrderComplited, setIsOrderComplited] = React.useState(false);
   const [OrderId, setOrderId] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   
 
-  const {setCartItems, cartItems} = React.useContext(AppContext);
+  
+
+  
+
 
   const onClickOrder = async () => {
     try {
@@ -35,8 +44,8 @@ function Drawer({onClose, items = [], onRemove} ) {
 
   return (
         
-        <div className="overlay ">
-            <div  className="drawer ">
+        <div className={`${styles.overlay} ${opened ? styles.overlayVisible : '' }`}>
+            <div  className={styles.drawer}>
                 <h2 className="d-flex justify-between mb-30 ">
                   Корзина <img onClick={onClose} className="cu-p" src="/img/btn-remove.svg" alt="" />
                 </h2>
@@ -44,7 +53,7 @@ function Drawer({onClose, items = [], onRemove} ) {
         {
           items.length > 0 ? 
         <div className="d-flex flex-column flex">
-          <div className="items">
+          <div className="items flex">
             {
               items.map((obj) => (
               <div key={obj.id} className="cartItem d-flex align-center mb-20">
@@ -66,12 +75,12 @@ function Drawer({onClose, items = [], onRemove} ) {
               <li>
                 <span>Итого</span>
                 <div></div>
-                <b>21 498 руб.</b>
+                <b>{sumPrice} руб.</b>
               </li>
               <li>
                 <span>Налог 5%: </span>
                 <div></div>
-                <b>1074 руб.</b>
+                <b>{sumPrice/100*5} руб.</b>
               </li>
             </ul>
             <button disabled = {isLoading} onClick={onClickOrder} className="greenButton">Оформит заказ <img src="/img/arrow.svg" alt="arrow" /></button>
